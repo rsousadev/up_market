@@ -1,0 +1,42 @@
+version: "3.10"
+
+x-common_dev: &common_env
+  PYTHONUNBUFFERED: 1
+  PYTHONDONTWRITEBYTECODE: 1
+services:
+  upmarket-api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - ./back/:/upmarket
+    ports:
+      - "8008:8000"
+    environment:
+      <<: *common_env
+      ALLOWED_HOSTS: ${ALLOWED_HOSTS}
+    depends_on:
+      - upmarket_db
+    links:
+      - upmarket_db:upmarket_db
+    networks:
+      - upmarket_net
+
+  upmarket_db:
+    image: mongo
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: ${MONGO_INITDB_ROOT_USERNAME}
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_INITDB_ROOT_PASSWORD}
+    ports:
+      - "27017:27017"
+    volumes:
+      - upmarket_data:/data/db
+    networks:
+      - upmarket_net
+
+volumes:
+  upmarket_data:
+    name: "upmarket_data"
+
+networks:
+  upmarket_net:

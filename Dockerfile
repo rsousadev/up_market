@@ -2,14 +2,12 @@
 # Version: 1.0
 FROM python:3.10.3
 
-RUN mkdir -p /upmarket
+COPY ./back /upmarket
 
-COPY ./back/ /upmarket/
+COPY ./back/requirements.txt /upmarket/requirements.txt
 
-WORKDIR /up_market
+WORKDIR upmarket
 
-RUN  pip3 install -r requirements.txt
+RUN pip install -r requirements.txt
 
-RUN ["chmod", "+x", "/opt/upmarket/docker-entrypoint.sh"]
-
-ENTRYPOINT ["/opt/upmarket/docker-entrypoint-dev.sh"]
+CMD ["uvicorn", "app.main:app", "--reload", "--host", "0.0.0.0", "--port", "8000"]

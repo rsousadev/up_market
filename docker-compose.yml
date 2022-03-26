@@ -9,12 +9,15 @@ services:
       context: .
       dockerfile: Dockerfile
     volumes:
-      - ./back/:/upmarket
+      - ./back:/upmarket
     ports:
-      - "8008:8000"
+      - "8000:8000"
     environment:
       <<: *common_env
-      ALLOWED_HOSTS: ${ALLOWED_HOSTS}
+      MONGO_INITDB_ROOT_USERNAME: ${MONGO_INITDB_ROOT_USERNAME}
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_INITDB_ROOT_PASSWORD}
+      MONGO_INITDB_DATABASE: ${MONGO_INITDB_DATABASE}
+      MONGODB_HOSTNAME: ${MONGODB_HOSTNAME}
     depends_on:
       - upmarket_db
     links:
@@ -27,6 +30,7 @@ services:
     environment:
       MONGO_INITDB_ROOT_USERNAME: ${MONGO_INITDB_ROOT_USERNAME}
       MONGO_INITDB_ROOT_PASSWORD: ${MONGO_INITDB_ROOT_PASSWORD}
+      MONGO_INITDB_DATABASE: ${MONGO_INITDB_DATABASE}
     ports:
       - "27017:27017"
     volumes:
